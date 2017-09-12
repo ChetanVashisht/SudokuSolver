@@ -1,8 +1,8 @@
-var row = function(cell) {return cell%9};
-var col = function(cell) {return Math.floor(cell/9)};
-var box = function(cell) {return 3*Math.floor(col(cell)/3) + Math.floor(row(cell)/3)};
+var row = (cell) => cell%9;
+var col = (cell) => Math.floor(cell/9);
+var box = (cell) => 3*Math.floor(col(cell)/3) + Math.floor(row(cell)/3);
 
-var getRowIndices = function(cell){ 
+var getRowIndices = (cell) => { 
 	var r = row(cell), rows = [];
 	for ( var x=0; x<9; x++){
 		rows.push(9*x+r);
@@ -10,7 +10,7 @@ var getRowIndices = function(cell){
 	return rows;
 };
 
-var getColIndices = function(cell){
+var getColIndices = (cell) => {
 	var r = col(cell), cols = [];
 	for ( var x=0; x<9; x++){
 		cols.push(x+9*r);
@@ -18,7 +18,7 @@ var getColIndices = function(cell){
 	return cols;
 };
 
-var getBoxIndices = function(cell){
+var getBoxIndices = (cell) => {
 	var b = box(cell), boxes = [];
 	var base = 27*Math.floor(b/3) + 3*Math.floor(b%3);
 	for (var i=0; i< 3; i++){
