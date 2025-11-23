@@ -3,5 +3,5 @@ import { solver, Sudoku } from "./solver.js";
 
 parentPort!.on("message", (sudoku: Sudoku) => {
   const solution = solver(sudoku) as Sudoku;
-  parentPort!.postMessage(solution);
+  parentPort!.postMessage({ done: true, solution, progress: 81 / 81 });
 });

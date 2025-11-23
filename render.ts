@@ -34,22 +34,28 @@ const getScreen = () => {
   return screen;
 };
 
-const renderCells = (boxProps: BoxOptions, sudoku: Sudoku) => {
+const colourIt = (sudoku: Sudoku, problem: Sudoku, index: number) => {
+  const cell = sudoku.charAt(index)!;
+  return problem.at(index) === "0" ? `{blue-fg}${cell}{/blue-fg}` : `{green-fg}{bold}${cell}{/bold}{/green-fg}`;
+};
+
+const renderCells = (boxProps: BoxOptions, sudoku: Sudoku, problem: Sudoku) => {
   for (let i = 0; i < 9; i++) {
     for (let j = 0; j < 9; j++) {
       const left = `${5 + i * 8}%`;
       const top = `${j * 11}%`;
       const box = new Box({ ...boxProps, left, top });
-      box.setContent(sudoku.charAt(i * 9 + j) === "0" ? "" : sudoku.charAt(i * 9 + j));
+      box.setContent(sudoku.charAt(i * 9 + j) === "0" ? "" : colourIt(sudoku, problem, i * 9 + j));
+      // box.setContent(sudoku.charAt(i * 9 + j) === "0" ? "" : sudoku.charAt(i * 9 + j));
       const colour = getColour(i, j);
       box.setBorderColors([colour]);
     }
   }
 };
 
-export const render = (sudoku: Sudoku) => {
+export const render = (problem: Sudoku, sudoku: Sudoku) => {
   const screen = getScreen();
   const boxProps = getBoxProps(screen);
-  renderCells(boxProps, sudoku);
+  renderCells(boxProps, sudoku, problem);
   screen.render();
 };

@@ -1,3 +1,5 @@
+import { parentPort } from "worker_threads";
+
 type FixedString<N extends number> = { 0: string; length: N } & string;
 type FixedArray<N extends number, T> = { 0: T; length: N } & T[];
 
@@ -89,7 +91,7 @@ export const iterator = (problem: Sudoku, solutions: Sudoku[], index: number): S
     return iterator(problem, solutions, index + 1);
   } else {
     const newSolutions = nextIteration(solutions, index);
-    // console.log(`Iteration ${index}, solution length: ${newSolutions.length}`);
+    parentPort!.postMessage({ done: false, solution: newSolutions.at(0), progress: index / 81 });
     return iterator(problem, newSolutions, index + 1);
   }
 };
