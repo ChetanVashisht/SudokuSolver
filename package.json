@@ -4,7 +4,7 @@
   "description": "Solves a sudoku with TDD",
   "main": "runner.ts",
   "scripts": {
-    "test": "tsx --test-reporter=spec --test runner.spec.ts input.spec.ts",
+    "test": "tsx --test *.spec.ts",
     "start": "tsc && node runner.js",
     "render": "tsc && node render.js"
   },
