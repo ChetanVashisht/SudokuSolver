@@ -4,7 +4,7 @@
   "description": "Solves a sudoku with TDD",
   "main": "runner.ts",
   "scripts": {
-    "test": "jest",
+    "test": "tsx --test-reporter=spec --test runner.spec.ts input.spec.ts",
     "start": "tsc && node runner.js",
     "render": "tsc && node render.js"
   },
@@ -12,13 +12,11 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "@types/jest": "30.0.0",
-    "jest": "30.2.0",
-    "ts-jest": "29.4.5",
-    "typescript": "5.9.3",
-    "@unblessed/node": "1.0.0-alpha.18"
+    "@unblessed/node": "1.0.0-alpha.18",
+    "typescript": "5.9.3"
   },
   "devDependencies": {
+    "@types/node": "^24.10.1",
     "tsx": "4.20.6"
   }
 }
