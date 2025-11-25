@@ -1,9 +1,9 @@
 import { Screen } from "@unblessed/node";
 import { render, getScreen } from "./render.js";
-import { solver, Sudoku } from "./solver.js";
-import { EventEmitter } from "events";
+import { replace, solver, Sudoku } from "./solver.js";
 
 import { Worker } from "worker_threads";
+import { updateState, State, getIndex } from "./input.js";
 
 function runWorker(problem: Sudoku) {
   return new Promise((resolve, reject) => {
@@ -25,9 +25,17 @@ const problem2: Sudoku = "800000000003600000070090200050007000000045700000100030
 // runWorker(problem2).catch(_ => process.exit(0));
 render(problem2, problem2);
 
+let state: State = {};
+let solution: Sudoku = problem2;
 const screen: Screen = getScreen();
+
 screen.on("keypress", (e: any) => {
-  console.log(e);
-  const sudoku = problem2.replaceAll("0", "1") as Sudoku;
-  render(problem2, sudoku);
+  state = updateState(state, e);
+  const index = getIndex(state);
+  console.log(state, index);
+  if (index > -1 && "input" in state) {
+    solution = replace(solution, index, state.input) as Sudoku;
+    console.log(solution);
+    render(problem2, solution);
+  }
 });
