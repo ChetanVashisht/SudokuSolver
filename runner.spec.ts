@@ -1,7 +1,7 @@
 import { describe, test } from "node:test";
 import assert from "node:assert";
 import type { Sudoku } from "./solver.js";
-import { block, col, colNo, generateGuessableOptions, generateSolutions, row, rowNo } from "./solver.js";
+import { block, col, colNo, generateGuessableOptions, generateSolutions, replace, row, rowNo } from "./solver.js";
 
 const problem = "800000000003600000070090200050007000000045700000100030001000068008500010090000400" as Sudoku;
 /**
@@ -104,5 +104,15 @@ describe("generate solutions", () => {
       "800000000023600000070090200050007000000045700000100030001000068008500010090000400",
       "800000000043600000070090200050007000000045700000100030001000068008500010090000400",
     ]);
+  });
+});
+
+describe("test replace", () => {
+  test("simple cases", () => {
+    assert.strictEqual(replace("onetwothree", 0, "3"), "3netwothree");
+    assert.strictEqual(replace("onetwothree", 0, "2"), "3netwothree");
+    assert.strictEqual(replace("onetwothree", 3, "3"), "one3wothree");
+    assert.strictEqual(replace("onetwothree", 10, "3"), "onetwothre3");
+    assert.strictEqual(replace("onetwothree", 10, "3"), "onetwothre3");
   });
 });

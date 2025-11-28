@@ -25,33 +25,44 @@ const getColour: (i: number, j: number) => string = (i: number, j: number) => {
 };
 
 let screen: Screen | null = null;
+let boxes: Array<Box> = [];
 
 export const getScreen = () => {
   if (screen === null) {
     screen = new Screen({ smartCSR: true, title: "Playground" });
-    screen.key(["q", "C-c"], () => {
-      screen!.destroy();
-      process.exit(0);
-    });
   }
   return screen;
+};
+
+const range = (start: number, stop: number, step: number) =>
+  Array.from({ length: Math.ceil((stop - start) / step) }, (_, i) => start + i * step);
+
+export const getBoxes = (screen: Screen) => {
+  const boxProps = getBoxProps(screen);
+  if (boxes.length === 0) {
+    boxes = range(0, 81, 1).map(_ => new Box({ ...boxProps }));
+  }
+  return boxes;
 };
 
 /** Pre existing cells are bold */
 const colourIt = (sudoku: Sudoku, problem: Sudoku, index: number): string => {
   const cell = sudoku.charAt(index)!;
   return problem.at(index) === "0"
-    ? `{#0ff0ff-fg}${cell}{/#0ff0ff-fg}`
-    : `{#ff0000-fg}{bold}${cell}{/bold}{/#ff0000-fg}`;
+    ? `{#0ff0ff-fg}{bold}${cell}{/bold}{/#0ff0ff-fg}`
+    : `{#ff0000-fg}${cell}{/#ff0000-fg}`;
 };
 
-const renderCells = (boxProps: BoxOptions, sudoku: Sudoku, problem: Sudoku): void => {
+const renderCells = (boxes: Box[], sudoku: Sudoku, problem: Sudoku): void => {
   for (let i = 0; i < 9; i++) {
     for (let j = 0; j < 9; j++) {
-      const left = `${5 + i * 8}%`;
-      const top = `${j * 11}%`;
-      const box = new Box({ ...boxProps, left, top });
-      box.setContent(sudoku.charAt(i * 9 + j) === "0" ? "" : colourIt(sudoku, problem, i * 9 + j));
+      const left = `${5 + j * 8}%`;
+      const top = `${i * 11}%`;
+      const index = i * 9 + j;
+      const box = boxes.at(index)!;
+      box.left = left;
+      box.top = top;
+      box.setContent(sudoku.charAt(index) === "0" ? "" : colourIt(sudoku, problem, index));
       const colour = getColour(i, j);
       box.setBorderColors([colour]);
     }
@@ -60,7 +71,7 @@ const renderCells = (boxProps: BoxOptions, sudoku: Sudoku, problem: Sudoku): voi
 
 export const render = (problem: Sudoku, sudoku: Sudoku): void => {
   const screen: Screen = getScreen();
-  const boxProps = getBoxProps(screen);
-  renderCells(boxProps, sudoku, problem);
+  const boxes = getBoxes(screen);
+  renderCells(boxes, sudoku, problem);
   screen.render();
 };

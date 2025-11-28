@@ -35,13 +35,13 @@ export const isTerminalState = (currentState: State): boolean => {
 const bigMap = new Map<number, Array<number>>();
 bigMap.set(1, [0, 1, 2, 9, 10, 11, 18, 19, 20]);
 bigMap.set(2, [3, 4, 5, 12, 13, 14, 21, 22, 23]);
-bigMap.set(3, [6, 7, 8, 15, 16, 17, 25, 26, 27]);
-bigMap.set(4, [28, 29, 30, 37, 38, 39, 46, 47, 48]);
-bigMap.set(5, [31, 32, 33, 40, 41, 42, 49, 50, 51]);
-bigMap.set(6, [34, 35, 36, 43, 44, 45, 52, 53, 54]);
-bigMap.set(7, [55, 56, 57, 64, 65, 66, 73, 74, 75]);
-bigMap.set(8, [58, 59, 60, 67, 68, 69, 76, 77, 78]);
-bigMap.set(9, [61, 62, 63, 70, 71, 72, 79, 80, 81]);
+bigMap.set(3, [6, 7, 8, 15, 16, 17, 24, 25, 26]);
+bigMap.set(4, [27, 28, 29, 36, 37, 38, 45, 46, 47]);
+bigMap.set(5, [30, 31, 32, 39, 40, 41, 48, 49, 50]);
+bigMap.set(6, [33, 34, 35, 42, 43, 44, 51, 52, 53]);
+bigMap.set(7, [54, 55, 56, 63, 64, 65, 72, 73, 74]);
+bigMap.set(8, [57, 58, 59, 66, 67, 68, 75, 76, 77]);
+bigMap.set(9, [60, 61, 62, 69, 70, 71, 78, 79, 80]);
 
 export const getIndex = (currentState: State): number => {
   if ("input" in currentState && "big" in currentState && "small" in currentState) {

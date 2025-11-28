@@ -6,6 +6,7 @@
   "scripts": {
     "test": "tsx --test *.spec.ts",
     "start": "tsc && node runner.js",
+    "start:debug": "tsc && node --inspect runner.js",
     "render": "tsc && node render.js"
   },
   "author": "",
