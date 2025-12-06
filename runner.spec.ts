@@ -110,7 +110,7 @@ describe("generate solutions", () => {
 describe("test replace", () => {
   test("simple cases", () => {
     assert.strictEqual(replace("onetwothree", 0, "3"), "3netwothree");
-    assert.strictEqual(replace("onetwothree", 0, "2"), "3netwothree");
+    assert.strictEqual(replace("onetwothree", 0, "2"), "2netwothree");
     assert.strictEqual(replace("onetwothree", 3, "3"), "one3wothree");
     assert.strictEqual(replace("onetwothree", 10, "3"), "onetwothre3");
     assert.strictEqual(replace("onetwothree", 10, "3"), "onetwothre3");
