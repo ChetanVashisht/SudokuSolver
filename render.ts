@@ -1,4 +1,4 @@
-import { Box, BoxOptions, Screen } from "@unblessed/node";
+import { Box, BoxOptions, Screen, Text } from "@unblessed/node";
 import { Sudoku } from "./solver";
 
 const getBoxProps = (screen: Screen) => {
@@ -13,6 +13,13 @@ const getBoxProps = (screen: Screen) => {
   } as BoxOptions;
 };
 
+const getText = (screen: Screen) => {
+  if (text === null) {
+    text = new Text({parent: screen, top: 30});
+  }
+  return text;
+}
+
 const getColour: (i: number, j: number) => string = (i: number, j: number) => {
   switch ((Math.floor(i / 3) + Math.floor(j / 3)) % 3) {
     case 0:
@@ -26,6 +33,7 @@ const getColour: (i: number, j: number) => string = (i: number, j: number) => {
 
 let screen: Screen | null = null;
 let boxes: Array<Box> = [];
+let text: Text| null = null;
 
 export const getScreen = () => {
   if (screen === null) {
@@ -56,8 +64,8 @@ const colourIt = (sudoku: Sudoku, problem: Sudoku, index: number): string => {
 const renderCells = (boxes: Box[], sudoku: Sudoku, problem: Sudoku): void => {
   for (let i = 0; i < 9; i++) {
     for (let j = 0; j < 9; j++) {
-      const left = `${5 + j * 8}%`;
-      const top = `${i * 11}%`;
+      const left = `${j * 8}`;
+      const top = `${i*3}`;
       const index = i * 9 + j;
       const box = boxes.at(index)!;
       box.left = left;
@@ -69,9 +77,12 @@ const renderCells = (boxes: Box[], sudoku: Sudoku, problem: Sudoku): void => {
   }
 };
 
-export const render = (problem: Sudoku, sudoku: Sudoku): void => {
+export const render = (problem: Sudoku, sudoku: Sudoku, frontier?: object): void => {
   const screen: Screen = getScreen();
   const boxes = getBoxes(screen);
   renderCells(boxes, sudoku, problem);
+  if (frontier) {
+    getText(screen).setContent(`Frontier: ${JSON.stringify(frontier)}`);
+  }
   screen.render();
 };

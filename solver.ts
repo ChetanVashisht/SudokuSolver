@@ -8,7 +8,7 @@ export type Row = FixedArray<9, string>;
 export type Column = FixedArray<9, string>;
 export type Box = FixedArray<9, string>;
 
-const invalidError = new Error("invalid index");
+export const invalidError = new Error("invalid index");
 
 function validateBounds(index: number) {
   if (index > 80 || index < 0) {
@@ -21,12 +21,10 @@ export const replace = (str: string, index: number, replacement: string) => {
 };
 
 export const rowNo = (sudoku: Sudoku, index: number): number => {
-  validateBounds(index);
   return Math.floor(index / 9);
 };
 
 export const colNo = (sudoku: Sudoku, index: number): number => {
-  validateBounds(index);
   return index % 9;
 };
 
@@ -57,25 +55,26 @@ export const block = (sudoku: Sudoku, index: number): Column => {
   return cells.map(c => sudoku.at(c)) as Box;
 };
 
-export const generateGuessableOptions = (sudoku: Sudoku, index: number): Array<string> => {
+const starter = new Set(["1", "2", "3", "4", "5", "6", "7", "8", "9"]);
+export const generateGuessableOptions = (sudoku: Sudoku, index: number): Set<string> => {
   const cell = sudoku.at(index);
   if (cell != "0") {
     throw invalidError;
   }
 
-  const starter = new Set(["1", "2", "3", "4", "5", "6", "7", "8", "9"]);
   const inSudoku = new Set([...row(sudoku, index), ...col(sudoku, index), ...block(sudoku, index)]);
 
-  return [...starter].filter(val => !inSudoku.has(val));
+  return starter.difference(inSudoku);
+  // return [...starter].filter(val => !inSudoku.has(val));
 };
 
 export const generateSolutions = (sudoku: Sudoku, index: number) => {
-  const options: string[] = generateGuessableOptions(sudoku, index);
-  return options.map(option => replace(sudoku, index, option));
+  const options: Set<string> = generateGuessableOptions(sudoku, index);
+  return [...options].map(option => replace(sudoku, index, option));
 };
 
 export const isValidSudoku = (sudoku: Sudoku, index: number) => {
-  return generateGuessableOptions(sudoku, index).length > 0;
+  return generateGuessableOptions(sudoku, index).size > 0;
 };
 
 export const nextIteration = (solutions: Sudoku[], index: number) => {
@@ -91,7 +90,7 @@ export const iterator = (problem: Sudoku, solutions: Sudoku[], index: number): S
     return iterator(problem, solutions, index + 1);
   } else {
     const newSolutions = nextIteration(solutions, index);
-    parentPort!.postMessage({ done: false, solution: newSolutions.at(0), progress: index / 81 });
+    parentPort!.postMessage({ done: false, solution: newSolutions.at(0), progress: index / 81, frontier: {frontier: newSolutions.length, usage: process.memoryUsage(), heap: process.threadCpuUsage()} });
     return iterator(problem, newSolutions, index + 1);
   }
 };
